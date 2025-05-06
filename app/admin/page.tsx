@@ -10,22 +10,10 @@ export default async function Page() {
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
       <Link 
-        href="/admin/projects/Nexoria" 
+        href="/admin/projects/newproject" 
         className={buttonVariants({size: "lg", variant: "outline"})}
       >
-        Nexoria
-      </Link>
-      <Link 
-        href="/admin/projects/Oteria" 
-        className={buttonVariants({size: "lg", variant: "outline"})}
-      >
-        Oteria
-      </Link>
-      <Link 
-        href="/admin/projects/Publiart" 
-        className={buttonVariants({size: "lg", variant: "outline"})}
-      >
-        Publiart
+        New Project
       </Link>
       </CardContent>
     </Card>
