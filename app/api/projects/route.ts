@@ -1,4 +1,6 @@
+import { prisma } from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+
 
 export async function GET() {
     return NextResponse.json({
@@ -9,12 +11,15 @@ export async function GET() {
 export async function POST(request: NextRequest) {
     const formData = await request.formData();
 
-    const data = {
-        project : formData.get("project name"),
-        description : formData.get("project description"),
-    };
+
+    const newProject= await prisma.project.create({
+        data: {
+            project: String(formData.get("project name")),
+            description: String(formData.get("project description")),
+        },
+    });
 
     return NextResponse.json({
-        json: data,
+        project: newProject,
     });
 }
