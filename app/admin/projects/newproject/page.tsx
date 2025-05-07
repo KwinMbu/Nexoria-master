@@ -1,9 +1,22 @@
+"use client"
+
+import { createProjectAction } from "./projects.action";
 import { Button } from "@/src/components/ui/button";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/src/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 
 export default function Page() {
+
+    const createProject = async (FormData: FormData) => {
+        const json = await createProjectAction({
+            project: String(FormData.get("project name")),
+            description: String(FormData.get("project description")),
+        });
+
+        console.log(json);
+    };
+
     return (
     <Card>
         <CardHeader>
@@ -11,8 +24,9 @@ export default function Page() {
         </CardHeader>
         <CardContent>
             <form 
-                action="/api/projects"
-                method="POST"
+                action= {async (formData) => { 
+                    await createProject(formData);
+                }}
             >
                 <Label>
                     Project

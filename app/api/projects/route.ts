@@ -9,13 +9,13 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-    const formData = await request.formData();
+    const json = await request.json();
 
 
     const newProject= await prisma.project.create({
         data: {
-            project: String(formData.get("project name")),
-            description: String(formData.get("project description")),
+            project: json.project,
+            description: json.description,
         },
     });
 
