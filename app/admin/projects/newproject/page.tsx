@@ -1,6 +1,6 @@
 "use client"
 
-import { createProjectAction } from "./projects.action";
+import { createProjectAction } from "./projects-action";
 import { Button } from "@/src/components/ui/button";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/src/components/ui/input";

@@ -22,3 +22,14 @@ export async function createProjectAction(project: {
         error: "Error while creating project",
     }
 }
+
+export async function deleteProjectAction(id: number) {
+    await prisma.project.delete({
+        where: {
+            id,
+        },
+    });
+    return {
+        message : "Project deleted",
+    };
+}
