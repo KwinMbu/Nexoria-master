@@ -21,14 +21,17 @@ export default async function Page() {
           <div className="absolute top-2 right-2">
             <DeleteProjectButton id={project.id}/>
           </div>
-          <div className="flex flex-col gap-2 flex-1">
+          <Link 
+            href={`/dashboard/${encodeURIComponent(project.project)}`}
+            className="flex flex-col gap-2 flex-1 cursor-pointer"
+          >
             <p className="text-lg font-semibold text-primary">{project.project}</p>
             <p className="max-w-[360px]">{project.description}</p>
-          </div> 
+          </Link> 
         </Card>
       ))}
       <Link 
-        href="/admin/projects/newproject" 
+        href="/dashboard/projects/newproject" 
         className={buttonVariants({size: "lg", variant: "outline"})}
       >
         New Project

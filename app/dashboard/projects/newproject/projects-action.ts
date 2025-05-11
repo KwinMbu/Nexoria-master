@@ -15,7 +15,7 @@ export async function createProjectAction(project: {
     });
 
     if (newProject) {
-        redirect("/admin");
+        redirect("/dashboard");
     }
     
     return {
