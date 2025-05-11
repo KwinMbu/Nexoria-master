@@ -10,10 +10,10 @@ export default function Home() {
       </CardHeader>
       <CardContent>
       <Link 
-        href="/admin" 
+        href="/dashboard" 
         className={buttonVariants({size: "lg", variant: "outline"})}
       >
-        /admin
+        /dashboard
       </Link>
       </CardContent>
     </Card>

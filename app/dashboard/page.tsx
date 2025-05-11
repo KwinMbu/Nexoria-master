@@ -13,7 +13,7 @@ export default async function Page() {
     return (
     <Card>
       <CardHeader>
-        <CardTitle>URL : /admin</CardTitle>
+        <CardTitle>URL : /dashboard</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {projects.map((project) => (
