@@ -24,7 +24,7 @@ export async function createTaskAction(
     });
 
     if (newTask) {
-        redirect("/dashboard");
+        redirect(`/dashboard`);
     }
     
     return {

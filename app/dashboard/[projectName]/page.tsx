@@ -49,7 +49,7 @@ export default async function ProjectPage({
                     ))
                 )}
                 <Link 
-                    href={`/dashboard/tasks/newtask`} 
+                    href={`/dashboard/tasks/newtask?projectId=${project.id}`} 
                     className={buttonVariants({size: "lg", variant: "outline"})}
                 >
                     Nouvelle Tâche
