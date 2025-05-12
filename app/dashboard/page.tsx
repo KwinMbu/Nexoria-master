@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
-import  Link  from "next/link";
-import { buttonVariants } from "@/src/components/ui/button";
+import Link from "next/link";
+import { Button, buttonVariants } from "@/src/components/ui/button";
 import { prisma } from "@/src/lib/prisma";
 import { DeleteProjectButton } from "./delete-projects-button";
 
@@ -8,9 +8,15 @@ export default async function Page() {
   const projects = await prisma.project.findMany({
     orderBy: {
       createdAt: "desc",
+    },
+    include: {
+      _count: {
+        select: { tasks: true }
+      }
     }
   })
-    return (
+  
+  return (
     <Card>
       <CardHeader>
         <CardTitle>URL : /dashboard</CardTitle>
@@ -25,7 +31,12 @@ export default async function Page() {
             href={`/dashboard/projects/${project.id}`}
             className="flex flex-col gap-2 flex-1 cursor-pointer"
           >
-            <p className="text-lg font-semibold text-primary">{project.project}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-lg font-semibold text-primary">{project.project}</p>
+              <Button variant="secondary" className="ml-2 bg-transparent">
+                {project._count.tasks} {project._count.tasks === 1 ? 'task' : 'tasks'}
+              </Button>
+            </div>
             <p className="max-w-[360px]">{project.description}</p>
           </Link> 
         </Card>
@@ -38,5 +49,5 @@ export default async function Page() {
       </Link>
       </CardContent>
     </Card>
-    );
+  );
 }
