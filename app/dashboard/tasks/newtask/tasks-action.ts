@@ -11,7 +11,7 @@ export async function createTaskAction(
     },
     projectId: number
 ){
-    const newTask= await prisma.task.create({
+    const newTask = await prisma.task.create({
         data: {
             task: task.task,
             description: task.description,
@@ -24,12 +24,12 @@ export async function createTaskAction(
     });
 
     if (newTask) {
-        redirect(`/dashboard`);
+        redirect(`/dashboard/projects/${projectId}`);
     }
     
     return {
         error: "Error while creating task",
-    }
+    };
 }
 
 export async function deleteTaskAction(id: number) {

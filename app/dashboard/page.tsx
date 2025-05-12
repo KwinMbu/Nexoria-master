@@ -22,7 +22,7 @@ export default async function Page() {
             <DeleteProjectButton id={project.id}/>
           </div>
           <Link 
-            href={`/dashboard/${encodeURIComponent(project.project)}`}
+            href={`/dashboard/projects/${project.id}`}
             className="flex flex-col gap-2 flex-1 cursor-pointer"
           >
             <p className="text-lg font-semibold text-primary">{project.project}</p>
