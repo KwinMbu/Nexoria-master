@@ -117,7 +117,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\nexoria-master\\src\\generated\\prisma",
+      "value": "C:\\Users\\asus i9\\Documents\\B1\\Developpement web backend\\Nexoria-master\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -131,7 +131,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\nexoria-master\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\asus i9\\Documents\\B1\\Developpement web backend\\Nexoria-master\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
