@@ -9,9 +9,10 @@ import { ArrowLeft } from "lucide-react"; // Importer l'icône de flèche
 export default async function ProjectPage({
     params,
 }: {
-    params: { projectId: string };
+    params: Promise<{ projectId: string }>;
 }) {
-    const projectId = parseInt(params.projectId);
+    const resolvedParams = await params;
+    const projectId = parseInt(resolvedParams.projectId);
     
     if (isNaN(projectId)) {
         notFound();
@@ -33,7 +34,6 @@ export default async function ProjectPage({
     return (
         <Card>
             <CardHeader>
-                {/* Bouton de retour au dashboard */}
                 <div className="flex items-center mb-4">
                     <Link 
                         href="/dashboard" 
