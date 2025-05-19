@@ -6,14 +6,14 @@ export default function Home() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>URL : /</CardTitle>
+        <CardTitle>Bienvenue sur Nexoria</CardTitle>
       </CardHeader>
       <CardContent>
       <Link 
         href="/dashboard" 
         className={buttonVariants({size: "lg", variant: "outline"})}
       >
-        /dashboard
+        Accéder à votre tableau de bord
       </Link>
       </CardContent>
     </Card>

@@ -17,36 +17,40 @@ export default async function Page() {
   })
   
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>URL : /dashboard</CardTitle>
+    <Card className="w-full">
+      <CardHeader className="flex items-center justify-between">
+        <CardTitle className="text-xl">My project</CardTitle>
+        <Link 
+          href="/dashboard/projects/newproject" 
+          className={buttonVariants({size: "default", variant: "outline"})}
+        >
+          Create new project
+        </Link>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {projects.map((project) => (
-        <Card className="p-4 flex items-start gap-4 relative" key={project.id}>
-          <div className="absolute top-2 right-2">
+        <Card className="p-4 relative" key={project.id}>
+          <div className="absolute top-4 right-4">
             <DeleteProjectButton id={project.id}/>
           </div>
-          <Link 
-            href={`/dashboard/projects/${project.id}`}
-            className="flex flex-col gap-2 flex-1 cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
+          
+          <div className="pr-12">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
               <p className="text-lg font-semibold text-primary">{project.project}</p>
-              <Button variant="secondary" className="ml-2 bg-transparent">
+              <Button variant="secondary" className="text-xs px-2 py-1 h-auto bg-transparent">
                 {project._count.tasks} {project._count.tasks === 1 ? 'task' : 'tasks'}
               </Button>
             </div>
-            <p className="max-w-[360px]">{project.description}</p>
-          </Link> 
+            
+            <Link 
+              href={`/dashboard/projects/${project.id}`}
+              className="flex flex-col gap-2 cursor-pointer mt-2"
+            > 
+              <p className="max-w-full text-sm sm:text-base">{project.description}</p>
+            </Link>
+          </div>
         </Card>
       ))}
-      <Link 
-        href="/dashboard/projects/newproject" 
-        className={buttonVariants({size: "lg", variant: "outline"})}
-      >
-        New Project
-      </Link>
       </CardContent>
     </Card>
   );
