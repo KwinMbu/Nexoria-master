@@ -95,7 +95,7 @@ export default function Page() {
                     <Input name="task name" required />
                 </Label>
                 <Label>
-                    Ne pas mettre de description si vous utilisez l&apos;IA
+                    Description (Ne pas mettre de description si vous utilisez l&apos;IA)
                     <Input name="task description" className="mb-3" />
                 </Label>
                 
