@@ -4,13 +4,15 @@ import { buttonVariants } from "@/src/components/ui/button";
 import { prisma } from "@/src/lib/prisma";
 import { DeleteTaskButton } from "../../delete-tasks-button";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react"; // Importer l'icône de flèche
+import { ArrowLeft } from "lucide-react";
 
-export default async function ProjectPage({
-    params,
-}: {
-    params: { projectId: string };
+export default async function ProjectPage(props: { 
+  params: Promise<{
+    projectId: string;
+  }>;
+  searchParams?: Promise<Record<string, string | string[]>>;
 }) {
+    const params = await props.params;
     const projectId = parseInt(params.projectId);
     
     if (isNaN(projectId)) {

@@ -108,19 +108,15 @@ export default function Page() {
                     <label 
                         htmlFor="use-ai" 
                         className="text-sm font-medium leading-none flex items-center gap-1.5 cursor-pointer"
-                    >
-                        <Sparkles className="h-4 w-4" />
-                        Utiliser l'IA pour générer des tâches à partir du projet
+                    >                        <Sparkles className="h-4 w-4" />
+                        Utiliser l&apos;IA pour générer des tâches à partir du projet
                     </label>
                 </div>
-                {useAI && (
-                    <p className="text-sm text-muted-foreground mb-5">
-                        L'IA utilisera la description du projet pour générer automatiquement des tâches. 
+                {useAI && (                    <p className="text-sm text-muted-foreground mb-5">
+                        L&apos;IA utilisera la description du projet pour générer automatiquement des tâches. 
                         La description que vous saisissez ci-dessus sera utilisée comme contexte supplémentaire.
                     </p>
-                )}
-                
-                <Button type="submit" disabled={isLoading}>
+                )}                  <Button type="submit" disabled={isLoading}>
                     {isLoading ? 'Création en cours...' : 'Create'}
                 </Button>
             </form>

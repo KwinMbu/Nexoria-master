@@ -74,13 +74,12 @@ export async function POST(req: Request) {
     }
 
     const data = await response.json();
-    
-    // Extraire les tâches du texte de réponse avec leurs informations
+      // Extraire les tâches du texte de réponse avec leurs informations
     const tasksText = data.choices[0].message.content;
     const tasksList = tasksText
       .split('\n')
       .filter(Boolean)
-      .filter( line => line.trim().length > 0);
+      .filter((line: string) => line.trim().length > 0);
 
     // Créer les tâches dans la base de données
     const createdTasks = [];
@@ -89,22 +88,21 @@ export async function POST(req: Request) {
       let taskName = taskLine.trim();
       let priority = "Moyenne";
       let timeEstimate = "Non spécifié";
-      
-      // Essayer d'extraire les parties de la tâche 
+        // Essayer d'extraire les parties de la tâche 
       if (taskLine.includes('|')) {
-        const parts = taskLine.split('|').map(part => part.trim());
+        const parts = taskLine.split('|').map((part: string) => part.trim());
         
         // Extraire le nom de la tâche (enlever "Tâche:" si présent)
         taskName = parts[0].replace(/^Tâche\s*:\s*/i, '').trim();
         
         // Extraire la priorité si présente
-        const priorityPart = parts.find( part => part.toLowerCase().includes('priorité'));
+        const priorityPart = parts.find((part: string) => part.toLowerCase().includes('priorité'));
         if (priorityPart) {
           priority = priorityPart.replace(/^Priorité\s*:\s*/i, '').trim();
         }
         
         // Extraire le temps estimé si présent
-        const timePart = parts.find(part => part.toLowerCase().includes('temps'));
+        const timePart = parts.find((part: string) => part.toLowerCase().includes('temps'));
         if (timePart) {
           timeEstimate = timePart.replace(/^Temps estimé\s*:\s*/i, '').trim();
         }
