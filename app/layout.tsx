@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/src/components/header";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="fr" className="h-full">
       <body
         className={`${geistSans.variable} font-sans ${geistMono.variable} 
          h-full p-4`}
@@ -32,6 +33,7 @@ export default function RootLayout({
         <div className="flex flex-col gap-4">
         <Header />
         {children}
+        <Toaster position="top-right" />
         </div>
       </body>
     </html>
