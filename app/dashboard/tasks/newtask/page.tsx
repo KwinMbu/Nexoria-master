@@ -28,11 +28,11 @@ export default function Page() {
             if (useAI) {
                 try {
                     // Appel à l'API d'IA pour générer des tâches
-                    const response = await fetch('/api/ai-tasks', {
+                    const response = await fetch('/api/ia-tasks', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ 
-                            taskName: taskName, // Envoie le nom de la tâche, pas sa description
+                            description: taskDescription, 
                             projectId: Number(projectId) 
                         }),
                     });
