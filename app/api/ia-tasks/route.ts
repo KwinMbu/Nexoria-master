@@ -51,7 +51,7 @@ export async function POST(req: Request) {
         model: 'mistral-small',        messages: [
           {
             role: 'system',
-            content: `Tu es un expert en gestion de projet. Voici le contexte du projet : "${projectDescription}". Tu dois analyser la tâche fournie et la décomposer en sous-tâches concrètes si nécessaire, ou simplement l'adapter au contexte du projet. Pour chaque tâche, présente-la au format "Tâche: [nom de la tâche avec emoji] | Priorité: [Haute/Moyenne/Basse] | Temps estimé: [X heures/jours]".`
+            content: `Tu es un expert en gestion de projet. Voici le contexte du projet : "${projectDescription}". Tu dois analyser la tâche fournie et la décomposer en plusieurs tâches (pas de sous-tâche) concrètes si nécessaire, ou simplement l'adapter au contexte du projet. Pour chaque tâche, présente-la au format "Tâche: [nom de la tâche avec emoji] | Priorité: [Haute/Moyenne/Basse] | Temps estimé: [X heures/jours]".`
           },
           {
             role: 'user',

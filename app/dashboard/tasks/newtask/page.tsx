@@ -1,6 +1,5 @@
 "use client"
 
-import { createTaskAction } from "./tasks-action";
 import { Button } from "@/src/components/ui/button";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/src/components/ui/input";
@@ -26,7 +25,7 @@ export default function Page() {
         
         try {
             if (useAI) {
-                try {                    // Appel à l'API d'IA pour analyser et diviser la tâche
+                try {                    
                     const response = await fetch('/api/ia-tasks', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -52,10 +51,20 @@ export default function Page() {
                 }
             } else {
                 // Créer une seule tâche normalement
-                await createTaskAction({
-                    task: taskName,
-                    description: taskDescription,
-                }, Number(projectId));
+                await fetch(`/api/project/${projectId}/task`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task: taskName,
+                        description: taskDescription,
+                    }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erreur lors de la création de la tâche");
+                    }
+                    return response.json();
+                })
             }
             
             if (projectId) {
@@ -90,10 +99,15 @@ export default function Page() {
                 <Label>
                     Task
                     <Input name="task name" required />
-                </Label>                <Label>
-                    Description (optionnel)
-                    <Input name="task description" className="mb-3" />
-                </Label>
+                </Label>                
+                
+                {!useAI && (
+                    <Label>
+                        Description (optionnel)
+                        <Input name="task description" className="mb-3" />
+                    </Label>
+                )}
+                
                 
                 <div className="flex items-center space-x-2 mb-5">
                     <Checkbox 

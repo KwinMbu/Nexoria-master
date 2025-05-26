@@ -152,7 +152,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
+    "rootEnvPath": "../../../.env",
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -162,16 +162,17 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": "POSTGRES_URL",
-        "value": "postgres://postgres.hmbzwyupgdznqrbomfck:CrU11c8puzJ1UBkm@aws-0-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x"
+        "fromEnvVar": "POSTGRES_PRISMA_URL",
+        "value": null
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider  = \"postgres\"\n  url       = env(\"POSTGRES_URL\")\n  directUrl = env(\"POSTGRES_URL_NON_POOLING\")\n}\n\nmodel Project {\n  id          Int      @id @default(autoincrement())\n  project     String\n  description String\n  createdAt   DateTime @default(now())\n  tasks       Task[]\n}\n\nmodel Task {\n  id          Int      @id @default(autoincrement())\n  task        String\n  description String\n  projectId   Int\n  createdAt   DateTime @default(now())\n  project     Project  @relation(fields: [projectId], references: [id])\n}\n",
-  "inlineSchemaHash": "ca15c0d8d5ae4380de48fb22ec8d24342db74530d06b4a693b71ffa813cc5621",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider  = \"postgres\"\n  url       = env(\"POSTGRES_PRISMA_URL\")\n  directUrl = env(\"POSTGRES_URL_NON_POOLING\")\n}\n\nmodel Project {\n  id          Int      @id @default(autoincrement())\n  project     String\n  description String\n  createdAt   DateTime @default(now())\n  tasks       Task[]\n}\n\nmodel Task {\n  id          Int      @id @default(autoincrement())\n  task        String\n  description String\n  projectId   Int\n  createdAt   DateTime @default(now())\n  project     Project  @relation(fields: [projectId], references: [id])\n}\n",
+  "inlineSchemaHash": "47af05b30cd23303fe4b498b8ec33ae70b73f73bed6fa56179f670201a452b32",
   "copyEngine": true
 }
 
