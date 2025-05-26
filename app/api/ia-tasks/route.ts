@@ -9,13 +9,18 @@ export async function POST(req: Request) {
         { error: "Configuration serveur incomplète" },
         { status: 500 }
       );
-    }
-
-    const { description, projectId } = await req.json();
+    }    const { task, projectId } = await req.json();
 
     if (!projectId) {
       return NextResponse.json(
         { error: "ProjectId requis" },
+        { status: 400 }
+      );
+    }
+
+    if (!task) {
+      return NextResponse.json(
+        { error: "Nom de tâche requis" },
         { status: 400 }
       );
     }
@@ -32,13 +37,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Utiliser la description du projet
+    // Utiliser la description du projet comme contexte
     const projectDescription = project.description;
-    
-    // Si description de tâche fournie, l'ajouter comme contexte supplémentaire
-    const contextDescription = description ? 
-      `${projectDescription} \nContexte supplémentaire: ${description}` : 
-      projectDescription;
 
     // Appel à l'API Mistral
     const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
@@ -48,15 +48,14 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'mistral-small',
-        messages: [
+        model: 'mistral-small',        messages: [
           {
             role: 'system',
-            content: 'Tu es un expert en gestion de projet, donc tu évites de dire "Cette tâche consiste à". Décompose ce projet en tâches concrètes avec leur priorité et temps estimé. Pour chaque tâche, présente-la au format "Tâche: [nom de la tâche avec emoji] | Priorité: [Haute/Moyenne/Basse] | Temps estimé: [X heures/jours]".'
+            content: `Tu es un expert en gestion de projet. Voici le contexte du projet : "${projectDescription}". Tu dois analyser la tâche fournie et la décomposer en sous-tâches concrètes si nécessaire, ou simplement l'adapter au contexte du projet. Pour chaque tâche, présente-la au format "Tâche: [nom de la tâche avec emoji] | Priorité: [Haute/Moyenne/Basse] | Temps estimé: [X heures/jours]".`
           },
           {
             role: 'user',
-            content: `Voici la description d'un projet: "${contextDescription}". Décompose-le en 5 à 8 tâches concrètes et actionnables. Pour chaque tâche, indique sa priorité (Haute, Moyenne ou Basse) et le temps estimé pour la réaliser.`
+            content: `Analyse cette tâche dans le contexte du projet : "${task}". Si c'est une tâche simple, adapte-la simplement au contexte. Si c'est une tâche complexe, décompose-la en 3 à 6 sous-tâches concrètes et actionnables. Pour chaque tâche, indique sa priorité (Haute, Moyenne ou Basse) et le temps estimé pour la réaliser.`
           }
         ],
         temperature: 0.7,

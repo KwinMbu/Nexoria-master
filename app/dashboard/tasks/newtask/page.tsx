@@ -26,13 +26,12 @@ export default function Page() {
         
         try {
             if (useAI) {
-                try {
-                    // Appel à l'API d'IA pour générer des tâches
+                try {                    // Appel à l'API d'IA pour analyser et diviser la tâche
                     const response = await fetch('/api/ia-tasks', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ 
-                            description: taskDescription, 
+                            task: taskName, 
                             projectId: Number(projectId) 
                         }),
                     });
@@ -40,12 +39,10 @@ export default function Page() {
                     if (!response.ok) {
                         throw new Error("Erreur lors de la génération des tâches");
                     }
-                    
-                    const data = await response.json();
-                    toast.success("Tâches générées avec succès", {
-                        description: `${data.tasks.length} tâches ont été créées.`
-                    });
-                } catch (aiError) {
+                      const data = await response.json();
+                    toast.success("Tâches analysées avec succès", {
+                        description: `${data.tasks.length} tâches ont été créées à partir de votre demande.`
+                    });                } catch (aiError) {
                     // Gestion spécifique des erreurs liées à l'IA
                     toast.error("Erreur IA", {
                         description: "Un problème est survenu avec l'IA. Essayez de créer la tâche manuellement."
@@ -93,9 +90,8 @@ export default function Page() {
                 <Label>
                     Task
                     <Input name="task name" required />
-                </Label>
-                <Label>
-                    Description (Ne pas mettre de description si vous utilisez l&apos;IA)
+                </Label>                <Label>
+                    Description (optionnel)
                     <Input name="task description" className="mb-3" />
                 </Label>
                 
@@ -109,15 +105,15 @@ export default function Page() {
                         htmlFor="use-ai" 
                         className="text-sm font-medium leading-none flex items-center gap-1.5 cursor-pointer"
                     >                        <Sparkles className="h-4 w-4" />
-                        Utiliser l&apos;IA pour générer des tâches à partir du projet
+                        Utiliser l&apos;IA pour analyser et diviser cette tâche
                     </label>
                 </div>
                 {useAI && (                    <p className="text-sm text-muted-foreground mb-5">
-                        L&apos;IA utilisera la description du projet pour générer automatiquement des tâches. 
-                        La description que vous saisissez ci-dessus sera utilisée comme contexte supplémentaire.
+                        L&apos;IA utilisera la description du projet comme contexte et analysera le nom de la tâche 
+                        pour la diviser en sous-tâches si nécessaire.
                     </p>
                 )}                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Création en cours...' : 'Create'}
+                    {isLoading ? 'Traitement en cours...' : 'Create'}
                 </Button>
             </form>
         </CardContent>
