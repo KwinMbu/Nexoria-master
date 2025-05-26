@@ -86,6 +86,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -107,6 +110,11 @@ exports.Prisma.TaskScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 
@@ -152,17 +160,17 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": "DATABASE_URL",
-        "value": "file:./dev.db"
+        "fromEnvVar": "POSTGRES_URL",
+        "value": "postgres://postgres.hmbzwyupgdznqrbomfck:CrU11c8puzJ1UBkm@aws-0-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x"
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Project {\n  id          Int      @id @default(autoincrement())\n  project     String\n  description String\n  createdAt   DateTime @default(now())\n  tasks       Task[]\n}\n\nmodel Task {\n  id          Int      @id @default(autoincrement())\n  task        String\n  description String\n  projectId   Int\n  createdAt   DateTime @default(now())\n  project     Project  @relation(fields: [projectId], references: [id])\n}\n",
-  "inlineSchemaHash": "c55af29f13fd4a3a66df50db5876481c4a937e107e01332c371fbe561e6e37a4",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider  = \"postgres\"\n  url       = env(\"POSTGRES_URL\")\n  directUrl = env(\"POSTGRES_URL_NON_POOLING\")\n}\n\nmodel Project {\n  id          Int      @id @default(autoincrement())\n  project     String\n  description String\n  createdAt   DateTime @default(now())\n  tasks       Task[]\n}\n\nmodel Task {\n  id          Int      @id @default(autoincrement())\n  task        String\n  description String\n  projectId   Int\n  createdAt   DateTime @default(now())\n  project     Project  @relation(fields: [projectId], references: [id])\n}\n",
+  "inlineSchemaHash": "ca15c0d8d5ae4380de48fb22ec8d24342db74530d06b4a693b71ffa813cc5621",
   "copyEngine": true
 }
 config.dirname = '/'
@@ -174,7 +182,7 @@ config.compilerWasm = undefined
 
 config.injectableEdgeEnv = () => ({
   parsed: {
-    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
+    POSTGRES_URL: typeof globalThis !== 'undefined' && globalThis['POSTGRES_URL'] || typeof process !== 'undefined' && process.env && process.env.POSTGRES_URL || undefined
   }
 })
 
