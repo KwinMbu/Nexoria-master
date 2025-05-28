@@ -35,9 +35,7 @@ export async function POST(req: Request) {
         { error: "Projet introuvable" },
         { status: 404 }
       );
-    }
-
-    // Utiliser la description du projet comme contexte
+    }    // Utiliser la description du projet comme contexte
     const projectDescription = project.description;
 
     // Appel à l'API Mistral
@@ -48,7 +46,8 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'mistral-small',        messages: [
+        model: 'mistral-small',
+        messages: [
           {
             role: 'system',
             content: `Tu es un expert en gestion de projet. Voici le contexte du projet : "${projectDescription}". Tu dois analyser la tâche fournie et l'adapter au contexte du projet sans la décomposer. Présente une seule tâche optimisée au format "Tâche: [nom de la tâche avec emoji] | Priorité: [Haute/Moyenne/Basse] | Temps estimé: [X heures/jours]".`
@@ -72,48 +71,55 @@ export async function POST(req: Request) {
       );
     }    const data = await response.json();
     
-    // Extraire la tâche unique du texte de réponse
+    // Extraire les tâches du texte de réponse avec leurs informations
     const tasksText = data.choices[0].message.content;
-    const taskLine = tasksText.trim();
-    
-    // Extraire le nom de la tâche (tout ce qui est avant le premier |)
-    let taskName = taskLine;
-    let priority = "Moyenne";
-    let timeEstimate = "Non spécifié";
-    
-    // Essayer d'extraire les parties de la tâche 
-    if (taskLine.includes('|')) {
-      const parts = taskLine.split('|').map((part: string) => part.trim());
-      
-      // Extraire le nom de la tâche (enlever "Tâche:" si présent)
-      taskName = parts[0].replace(/^Tâche\s*:\s*/i, '').trim();
-      
-      // Extraire la priorité si présente
-      const priorityPart = parts.find((part: string) => part.toLowerCase().includes('priorité'));
-      if (priorityPart) {
-        priority = priorityPart.replace(/^Priorité\s*:\s*/i, '').trim();
-      }
-      
-      // Extraire le temps estimé si présent
-      const timePart = parts.find((part: string) => part.toLowerCase().includes('temps'));
-      if (timePart) {
-        timeEstimate = timePart.replace(/^Temps estimé\s*:\s*/i, '').trim();
-      }
-    }
-    
-    // Générer la description avec la priorité et le temps estimé
-    const description = `Priorité: ${priority} | Temps estimé: ${timeEstimate}`;
-    
-    // Créer une seule tâche dans la base de données
-    const createdTask = await prisma.task.create({
-      data: {
-        task: taskName,
-        description: description,
-        projectId: Number(projectId)
-      }
-    });
+    const tasksList = tasksText
+      .split('\n')
+      .filter(Boolean)
+      .filter((line: string) => line.trim().length > 0);
 
-    return NextResponse.json({ task: createdTask });
+    // Créer les tâches dans la base de données
+    const createdTasks = [];
+    for (const taskLine of tasksList) {
+      // Extraire le nom de la tâche (tout ce qui est avant le premier |)
+      let taskName = taskLine.trim();
+      let priority = "Moyenne";
+      let timeEstimate = "Non spécifié";
+      
+      // Essayer d'extraire les parties de la tâche 
+      if (taskLine.includes('|')) {
+        const parts = taskLine.split('|').map((part: string) => part.trim());
+        
+        // Extraire le nom de la tâche (enlever "Tâche:" si présent)
+        taskName = parts[0].replace(/^Tâche\s*:\s*/i, '').trim();
+        
+        // Extraire la priorité si présente
+        const priorityPart = parts.find((part: string) => part.toLowerCase().includes('priorité'));
+        if (priorityPart) {
+          priority = priorityPart.replace(/^Priorité\s*:\s*/i, '').trim();
+        }
+        
+        // Extraire le temps estimé si présent
+        const timePart = parts.find((part: string) => part.toLowerCase().includes('temps'));
+        if (timePart) {
+          timeEstimate = timePart.replace(/^Temps estimé\s*:\s*/i, '').trim();
+        }
+      }
+      
+      // Générer la description avec la priorité et le temps estimé
+      const description = `Priorité: ${priority} | Temps estimé: ${timeEstimate}`;
+      
+      const task = await prisma.task.create({
+        data: {
+          task: taskName,
+          description: description,
+          projectId: Number(projectId)
+        }
+      });
+      createdTasks.push(task);
+    }
+
+    return NextResponse.json({ tasks: createdTasks });
   } catch (error) {
     console.error('Error in AI tasks generation:', error);
     return NextResponse.json(
