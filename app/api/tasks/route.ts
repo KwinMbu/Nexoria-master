@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from "@/src/lib/prisma";
 
-export async function GET(request: Request) {
+export async function GET() {
    // Fetch all tasks for the authenticated user
    try {
        const tasks = await prisma.task.findMany({

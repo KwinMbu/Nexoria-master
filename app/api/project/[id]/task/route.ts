@@ -3,7 +3,7 @@ import { prisma } from "@/src/lib/prisma";
 
 export async function POST(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const json = await req.json();
     const { id } = await params;

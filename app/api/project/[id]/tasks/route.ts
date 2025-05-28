@@ -1,7 +1,10 @@
 import { prisma } from "@/src/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET({params}:{ params:  Promise< { id: string }> }) {
+export async function GET(
+    request: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
     const { id } = await params;
 
     // Validate ID
