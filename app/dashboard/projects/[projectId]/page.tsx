@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import Link from "next/link";
 import { buttonVariants } from "@/src/components/ui/button";
-import { prisma } from "@/src/lib/prisma";
 import { DeleteTaskButton } from "../../delete-tasks-button";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -19,13 +18,20 @@ export default async function ProjectPage(props: {
         notFound();
     }
 
-    const project = await prisma.project.findUnique({
-        where: {
-            id: projectId,
+    const project = await fetch(`/api/project/${projectId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
         },
-        include: {
-            tasks: true,
-        },
+    }).then((res) => {
+        if (!res.ok) {
+            throw new Error("Failed to fetch project");
+        }
+        return res.json();
+    }
+    ).catch((error) => {
+        console.error("Error fetching project:", error);
+        notFound();
     });
 
     if (!project) {

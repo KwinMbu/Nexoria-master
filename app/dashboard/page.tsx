@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/ca
 import Link from "next/link";
 import { Button, buttonVariants } from "@/src/components/ui/button";
 import { DeleteProjectButton } from "./delete-projects-button";
-import { prisma } from "@/src/lib/prisma";
+import prisma from "@/src/lib/prisma";
 
 interface Project {
     id: number;
