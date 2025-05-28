@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/src/components/ui/button";
 
-export function DeleteProjectButton(props: {id: number}) {
+export function DeleteProjectButton(props: {id: string}) {
     const [isConfirm, setIsConfirm] = useState(false);
     const router = useRouter();
 
