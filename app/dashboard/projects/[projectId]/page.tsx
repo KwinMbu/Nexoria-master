@@ -1,54 +1,111 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import Link from "next/link";
-import { buttonVariants } from "@/src/components/ui/button";
+import { Button, buttonVariants } from "@/src/components/ui/button";
 import { DeleteTaskButton } from "../../delete-tasks-button";
-import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default async function ProjectPage(props: { 
+export default function ProjectPage(props: { 
   params: Promise<{
     projectId: string;
   }>;
   searchParams?: Promise<Record<string, string | string[]>>;
-}) {    const params = await props.params;
-    const projectId = parseInt(params.projectId);
-    
-    if (isNaN(projectId)) {
-        notFound();
-    }
+}) {
+    const [project, setProject] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [projectId, setProjectId] = useState<number | null>(null);
+    const router = useRouter();
 
-    // Get the base URL for API calls
-    const baseUrl = process.env.VERCEL_URL || 'http://localhost:3000';
-    
-    const project = await fetch(`${baseUrl}/api/project/${projectId}`, {
-        method: "GET",
-        cache: 'no-store',
-    }).then((res) => {
-        if (!res.ok) {
-            throw new Error("Failed to fetch project");
+    useEffect(() => {
+        const initializeParams = async () => {
+            const params = await props.params;
+            const id = parseInt(params.projectId);
+            
+            if (isNaN(id)) {
+                router.push('/404');
+                return;
+            }
+            
+            setProjectId(id);
+        };
+        
+        initializeParams();
+    }, [props.params, router]);
+
+    const fetchProject = async () => {
+        if (!projectId) return;
+        
+        setLoading(true);
+        try {
+            const response = await fetch(`/api/project/${projectId}`, { cache: 'no-store' });
+            if (response.ok) {
+                const data = await response.json();
+                setProject(data);
+            } else {
+                router.push('/404');
+            }
+        } catch (error) {
+            console.error("Error fetching project:", error);
+            router.push('/404');
+        } finally {
+            setLoading(false);
         }
-        return res.json();
-    }
-    ).catch((error) => {
-        console.error("Error fetching project:", error);
-        notFound();
-    });
+    };    useEffect(() => {
+        if (projectId) {
+            fetchProject();
+        }
+    }, [projectId]);
 
-    if (!project) {
-        notFound();
+    if (loading || !project) {
+        return (
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between mb-4">
+                        <Link 
+                            href="/dashboard" 
+                            className={buttonVariants({size: "sm", variant: "outline"})}
+                        >
+                            <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
+                        </Link>
+                        <Button 
+                            onClick={fetchProject}
+                            variant="outline" 
+                            size="sm"
+                            disabled
+                        >
+                            <RefreshCw className="h-4 w-4 animate-spin" />
+                        </Button>
+                    </div>
+                    <CardTitle>Loading...</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">Loading project details...</p>
+                </CardContent>
+            </Card>
+        );
     }
 
     return (
         <Card>
             <CardHeader>
-                {/* Bouton de retour au dashboard */}
-                <div className="flex items-center mb-4">
+                <div className="flex items-center justify-between mb-4">
                     <Link 
                         href="/dashboard" 
                         className={buttonVariants({size: "sm", variant: "outline"})}
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
                     </Link>
+                    <Button 
+                        onClick={fetchProject}
+                        variant="outline" 
+                        size="sm"
+                        disabled={loading}
+                    >
+                        <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                    </Button>
                 </div>
                 <CardTitle>{project.project}</CardTitle>
                 <p className="text-muted-foreground">{project.description}</p>
