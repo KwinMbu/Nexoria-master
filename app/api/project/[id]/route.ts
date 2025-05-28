@@ -19,6 +19,13 @@ export async function GET(
     // Fetch project
     const project = await prisma.project.findUnique({
         where: { id: Number(id) },
+        include: {
+            tasks: {
+                orderBy: {
+                    createdAt: 'desc',
+                },
+            },
+        },
     });
 
     if (!project) {

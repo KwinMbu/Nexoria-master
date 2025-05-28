@@ -4,25 +4,26 @@ import { buttonVariants } from "@/src/components/ui/button";
 import { DeleteTaskButton } from "../../delete-tasks-button";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
 export default async function ProjectPage(props: { 
   params: Promise<{
     projectId: string;
   }>;
   searchParams?: Promise<Record<string, string | string[]>>;
-}) {
-    const params = await props.params;
+}) {    const params = await props.params;
     const projectId = parseInt(params.projectId);
     
     if (isNaN(projectId)) {
         notFound();
     }
 
-    const project = await fetch(`/api/project/${projectId}`, {
+    // Get the base URL for API calls
+    const baseUrl = process.env.VERCEL_URL || 'http://localhost:3000';
+    
+    const project = await fetch(`${baseUrl}/api/project/${projectId}`, {
         method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        cache: 'no-store',
     }).then((res) => {
         if (!res.ok) {
             throw new Error("Failed to fetch project");
@@ -65,10 +66,10 @@ export default async function ProjectPage(props: {
                 {project.tasks.length === 0 ? (
                     <p className="text-muted-foreground">Aucune tâche pour ce projet.</p>
                 ) : (
-                    project.tasks.map((task) => (
+                    project.tasks.map((task: { id: string; task: string; description: string }) => (
                         <Card className="p-4 flex items-start gap-4 relative" key={task.id}>
                             <div className="absolute top-2 right-2">
-                                <DeleteTaskButton id={task.id} />
+                                <DeleteTaskButton id={Number(task.id)} />
                             </div>
                             <div className="flex flex-col gap-2 flex-1">
                                 <p className="text-lg font-semibold text-primary">{task.task}</p>
