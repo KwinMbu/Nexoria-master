@@ -133,7 +133,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\asus i9\\Desktop\\Nexoria-Master\\src\\generated\\prisma",
+      "value": "c:\\Users\\asus i9\\Desktop\\Nexoria-Master\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -147,7 +147,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\asus i9\\Desktop\\Nexoria-Master\\prisma\\schema.prisma",
+    "sourceFilePath": "c:\\Users\\asus i9\\Desktop\\Nexoria-Master\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -161,12 +161,11 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "POSTGRES_PRISMA_URL",
-        "value": null
+        "value": "postgres://postgres.hmbzwyupgdznqrbomfck:CrU11c8puzJ1UBkm@aws-0-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x"
       }
     }
   },

@@ -57,11 +57,11 @@ export default function Page() {
             >
                 <Label>
                     Project
-                    <Input name="project name" />
+                    <Input name="project name" required/>
                 </Label>
                 <Label>
                     Description
-                    <Input name="project description" className="mb-5" />
+                    <Input name="project description" className="mb-5" required />
                 </Label>
                 <Button type="submit">Create</Button>
             </form>
