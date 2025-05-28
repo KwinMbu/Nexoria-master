@@ -4,7 +4,6 @@ import { buttonVariants } from "@/src/components/ui/button";
 import { DeleteTaskButton } from "../../delete-tasks-button";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
 export default async function ProjectPage(props: { 
   params: Promise<{
