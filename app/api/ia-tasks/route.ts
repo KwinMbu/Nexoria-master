@@ -28,15 +28,12 @@ export async function POST(req: Request) {
     // Récupérer le projet et sa description
     const project = await prisma.project.findUnique({
       where: { id: Number(projectId) }
-    });
-
-    if (!project) {
+    });    if (!project) {
       return NextResponse.json(
         { error: "Projet introuvable" },
         { status: 404 }
       );
-    }    // Utiliser la description du projet comme contexte
-    const projectDescription = project.description;
+    }
 
     // Appel à l'API Mistral
     const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
