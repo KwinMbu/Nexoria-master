@@ -6,37 +6,20 @@ import { Button, buttonVariants } from "@/src/components/ui/button";
 import { DeleteTaskButton } from "../../delete-tasks-button";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
-export default function ProjectPage(props: { 
-  params: Promise<{
-    projectId: string;
-  }>;
-  searchParams?: Promise<Record<string, string | string[]>>;
-}) {
+export default function ProjectPage() {
     const [project, setProject] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [projectId, setProjectId] = useState<number | null>(null);
+    const params = useParams();
     const router = useRouter();
-
-    useEffect(() => {
-        const initializeParams = async () => {
-            const params = await props.params;
-            const id = parseInt(params.projectId);
-            
-            if (isNaN(id)) {
-                router.push('/404');
-                return;
-            }
-            
-            setProjectId(id);
-        };
-        
-        initializeParams();
-    }, [props.params, router]);
+    const projectId = params.projectId as string;
 
     const fetchProject = async () => {
-        if (!projectId) return;
+        if (!projectId || isNaN(Number(projectId))) {
+            router.push('/404');
+            return;
+        }
         
         setLoading(true);
         try {
@@ -44,20 +27,17 @@ export default function ProjectPage(props: {
             if (response.ok) {
                 const data = await response.json();
                 setProject(data);
-            } else {
-                router.push('/404');
             }
         } catch (error) {
             console.error("Error fetching project:", error);
-            router.push('/404');
         } finally {
             setLoading(false);
         }
-    };    useEffect(() => {
-        if (projectId) {
-            fetchProject();
-        }
-    }, [projectId]);
+    };
+
+    useEffect(() => {
+        fetchProject();
+    }, []);
 
     if (loading || !project) {
         return (
