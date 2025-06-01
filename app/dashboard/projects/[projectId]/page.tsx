@@ -5,17 +5,29 @@ import Link from "next/link";
 import { Button, buttonVariants } from "@/src/components/ui/button";
 import { DeleteTaskButton } from "../../delete-tasks-button";
 import { ArrowLeft, RefreshCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 
+interface Task {
+    id: string;
+    task: string;
+    description: string;
+}
+
+interface Project {
+    id: number;
+    project: string;
+    description: string;
+    tasks: Task[];
+}
+
 export default function ProjectPage() {
-    const [project, setProject] = useState<any>(null);
+    const [project, setProject] = useState<Project | null>(null);
     const [loading, setLoading] = useState(true);
     const params = useParams();
-    const router = useRouter();
-    const projectId = params.projectId as string;
+    const router = useRouter();    const projectId = params.projectId as string;
 
-    const fetchProject = async () => {
+    const fetchProject = useCallback(async () => {
         if (!projectId || isNaN(Number(projectId))) {
             router.push('/404');
             return;
@@ -33,11 +45,11 @@ export default function ProjectPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [projectId, router]);
 
     useEffect(() => {
         fetchProject();
-    }, []);
+    }, [fetchProject]);
 
     if (loading || !project) {
         return (
@@ -98,11 +110,10 @@ export default function ProjectPage() {
                 >
                      Create New Task
                 </Link>
-                </p>
-                {project.tasks.length === 0 ? (
+                </p>                {project.tasks.length === 0 ? (
                     <p className="text-muted-foreground">Aucune tâche pour ce projet.</p>
                 ) : (
-                    project.tasks.map((task: { id: string; task: string; description: string }) => (
+                    project.tasks.map((task: Task) => (
                         <Card className="p-4 flex items-start gap-4 relative" key={task.id}>
                             <div className="absolute top-2 right-2">
                                 <DeleteTaskButton id={Number(task.id)} />
