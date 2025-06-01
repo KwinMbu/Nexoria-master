@@ -109,7 +109,7 @@ export default function Page() {
                 )}
                 
                 
-                <div className="flex items-center space-x-2 mb-5">
+                <div className="flex items-center space-x-2 mb-5 mt-5">
                     <Checkbox 
                         id="use-ai" 
                         checked={useAI} 

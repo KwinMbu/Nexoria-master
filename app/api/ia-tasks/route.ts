@@ -50,11 +50,11 @@ export async function POST(req: Request) {
         messages: [
           {
             role: 'system',
-            content: `Tu es un expert en gestion de projet. Voici le contexte du projet : "${projectDescription}". Tu dois analyser la tâche fournie et l'adapter au contexte du projet sans la décomposer. Présente une seule tâche optimisée au format "Tâche: [nom de la tâche avec emoji] | Priorité: [Haute/Moyenne/Basse] | Temps estimé: [X heures/jours]".`
+            content: `Tu es un expert en gestion de projet. Voici le contexte du projet : "${projectDescription}". Tu dois analyser la tâche fournie et la décomposer en plusieurs tâches concrètes si nécessaire, ou simplement l'adapter au contexte du projet. Pour chaque tâche, présente-la au format "Tâche: [nom de la tâche avec emoji] | Priorité: [Haute/Moyenne/Basse] | Temps estimé: [X heures/jours]".`
           },
           {
             role: 'user',
-            content: `Adapte cette tâche au contexte du projet : "${task}". Ne crée qu'une seule tâche optimisée et contextualisée. Indique sa priorité (Haute, Moyenne ou Basse) et le temps estimé pour la réaliser.`
+            content: `Analyse cette tâche dans le contexte du projet : "${task}". Si c'est une tâche simple, adapte-la simplement au contexte. Si c'est une tâche complexe, décompose-la en 3 à 6 tâches concrètes et actionnables. Pour chaque tâche, indique sa priorité (Haute, Moyenne ou Basse) et le temps estimé pour la réaliser.`
           }
         ],
         temperature: 0.7,

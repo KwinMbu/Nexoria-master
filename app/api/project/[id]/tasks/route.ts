@@ -15,11 +15,10 @@ export async function GET(
         );
     }
 
-    try {
-        const tasks = await prisma.task.findMany({
+    try {        const tasks = await prisma.task.findMany({
             where: { projectId: Number(id) },
             orderBy: {
-                createdAt: 'desc',
+                createdAt: 'asc',
             },
         });
 

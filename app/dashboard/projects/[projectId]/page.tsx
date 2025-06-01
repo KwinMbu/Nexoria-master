@@ -9,9 +9,10 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 interface Task {
-    id: string;
+    id: number;
     task: string;
     description: string;
+    createdAt: string;
 }
 
 interface Project {
@@ -112,8 +113,7 @@ export default function ProjectPage() {
                 </Link>
                 </p>                {project.tasks.length === 0 ? (
                     <p className="text-muted-foreground">Aucune tâche pour ce projet.</p>
-                ) : (
-                    project.tasks.map((task: Task) => (
+                ) : (                    project.tasks.map((task: Task) => (
                         <Card className="p-4 flex items-start gap-4 relative" key={task.id}>
                             <div className="absolute top-2 right-2">
                                 <DeleteTaskButton id={Number(task.id)} />
@@ -121,6 +121,9 @@ export default function ProjectPage() {
                             <div className="flex flex-col gap-2 flex-1">
                                 <p className="text-lg font-semibold text-primary">{task.task}</p>
                                 <p className="max-w-[360px]">{task.description}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    Créé le: {new Date(task.createdAt).toLocaleString('fr-FR')}
+                                </p>
                             </div>
                         </Card>
                     ))

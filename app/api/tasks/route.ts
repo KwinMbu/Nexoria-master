@@ -3,10 +3,9 @@ import prisma from "@/src/lib/prisma";
 
 export async function GET() {
    // Fetch all tasks for the authenticated user
-   try {
-       const tasks = await prisma.task.findMany({
+   try {       const tasks = await prisma.task.findMany({
            orderBy: {
-               createdAt: 'desc',
+               createdAt: 'asc',
            },
        });
        return NextResponse.json(tasks);

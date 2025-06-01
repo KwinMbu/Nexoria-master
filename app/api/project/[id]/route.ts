@@ -14,15 +14,13 @@ export async function GET(
             { error: "Project ID is required" },
             { status: 400 }
         );
-    }
-
-    // Fetch project
+    }    // Fetch project
     const project = await prisma.project.findUnique({
         where: { id: Number(id) },
         include: {
             tasks: {
                 orderBy: {
-                    createdAt: 'desc',
+                    createdAt: 'asc',
                 },
             },
         },
