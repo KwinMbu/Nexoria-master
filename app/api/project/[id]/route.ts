@@ -51,13 +51,25 @@ export async function DELETE(
         );
     }
 
-    // Delete project
-    await prisma.project.delete({
-        where: { id: Number(id) },
-    });
+    try {
+        // First, delete all tasks associated with this project
+        await prisma.task.deleteMany({
+            where: { projectId: Number(id) },
+        });
 
+        // Then delete the project
+        await prisma.project.delete({
+            where: { id: Number(id) },
+        });
 
-    return NextResponse.json({
-        message: "Project deleted successfully",
-    });
+        return NextResponse.json({
+            message: "Project deleted successfully",
+        });
+    } catch (error) {
+        console.error("Error deleting project:", error);
+        return NextResponse.json(
+            { error: "Failed to delete project" },
+            { status: 500 }
+        );
+    }
 }

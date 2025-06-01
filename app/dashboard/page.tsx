@@ -49,7 +49,7 @@ export default function Dashboard() {
             <Button 
               onClick={fetchProjects}
               variant="outline" 
-              size="sm"
+              size="default"
               disabled
             >
               <RefreshCw className="h-4 w-4 animate-spin" />
@@ -77,7 +77,7 @@ export default function Dashboard() {
         <Button 
           onClick={fetchProjects}
           variant="outline" 
-          size="sm"
+          size="default"
           disabled={loading}
         >
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -104,7 +104,7 @@ export default function Dashboard() {
       <Button 
         onClick={fetchProjects}
         variant="outline" 
-        size="sm"
+        size="default"
         disabled={loading}
       >
         <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
