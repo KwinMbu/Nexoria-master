@@ -165,13 +165,13 @@ const config = {
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": "POSTGRES_PRISMA_URL",
+        "fromEnvVar": "DATABASE_URL",
         "value": null
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider  = \"postgres\"\n  url       = env(\"POSTGRES_PRISMA_URL\")\n  directUrl = env(\"POSTGRES_URL_NON_POOLING\")\n}\n\nmodel Project {\n  id          Int      @id @default(autoincrement())\n  project     String\n  description String\n  createdAt   DateTime @default(now())\n  tasks       Task[]\n}\n\nmodel Task {\n  id          Int      @id @default(autoincrement())\n  task        String\n  description String\n  projectId   Int\n  createdAt   DateTime @default(now())\n  project     Project  @relation(fields: [projectId], references: [id])\n}\n",
-  "inlineSchemaHash": "47af05b30cd23303fe4b498b8ec33ae70b73f73bed6fa56179f670201a452b32",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider  = \"postgres\"\n  url       = env(\"DATABASE_URL\")\n  directUrl = env(\"POSTGRES_URL_NON_POOLING\")\n}\n\nmodel Project {\n  id          Int      @id @default(autoincrement())\n  project     String\n  description String\n  createdAt   DateTime @default(now())\n  tasks       Task[]\n}\n\nmodel Task {\n  id          Int      @id @default(autoincrement())\n  task        String\n  description String\n  projectId   Int\n  createdAt   DateTime @default(now())\n  project     Project  @relation(fields: [projectId], references: [id])\n}\n",
+  "inlineSchemaHash": "a0484d5214355ca52a8dbeb6f34c2c21dfeb81e919a50e4ad2174bce6b29e1a2",
   "copyEngine": true
 }
 config.dirname = '/'
@@ -183,7 +183,7 @@ config.compilerWasm = undefined
 
 config.injectableEdgeEnv = () => ({
   parsed: {
-    POSTGRES_PRISMA_URL: typeof globalThis !== 'undefined' && globalThis['POSTGRES_PRISMA_URL'] || typeof process !== 'undefined' && process.env && process.env.POSTGRES_PRISMA_URL || undefined
+    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
   }
 })
 
