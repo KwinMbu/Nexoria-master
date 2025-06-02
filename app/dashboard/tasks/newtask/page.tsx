@@ -1,6 +1,5 @@
 "use client"
 
-import { createTaskAction } from "./tasks-action";
 import { Button } from "@/src/components/ui/button";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/src/components/ui/input";
@@ -26,7 +25,7 @@ export default function Page() {
         
         try {
             if (useAI) {
-                try {                    // Appel à l'API d'IA pour analyser et diviser la tâche
+                try {                    
                     const response = await fetch('/api/ia-tasks', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -52,10 +51,20 @@ export default function Page() {
                 }
             } else {
                 // Créer une seule tâche normalement
-                await createTaskAction({
-                    task: taskName,
-                    description: taskDescription,
-                }, Number(projectId));
+                await fetch(`/api/project/${projectId}/task`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task: taskName,
+                        description: taskDescription,
+                    }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erreur lors de la création de la tâche");
+                    }
+                    return response.json();
+                })
             }
             
             if (projectId) {
@@ -76,7 +85,7 @@ export default function Page() {
     <Card>
         <CardHeader>
             <CardTitle>New Task</CardTitle>
-            {projectId && <p className="text-sm text-muted-foreground">Pour le projet ID: {projectId}</p>}
+            {projectId && <p className="text-sm text-muted-foreground">For project ID: {projectId}</p>}
         </CardHeader>
         <CardContent>
             <form 
@@ -86,34 +95,44 @@ export default function Page() {
                     const formData = new FormData(e.currentTarget);
                     await createTask(formData);
                 }}
+                className="flex flex-col gap-5"
             >
-                <Label>
+                <Label className="text-base font-semibold mb-1">
                     Task
-                    <Input name="task name" required />
-                </Label>                <Label>
-                    Description (optionnel)
-                    <Input name="task description" className="mb-3" />
-                </Label>
-                
-                <div className="flex items-center space-x-2 mb-5">
+                    <Input name="task name" required className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80" placeholder="Task name" />
+                </Label>                
+                {!useAI && (
+                    <Label className="text-base font-semibold mb-1">
+                        Description <span className="text-xs text-muted-foreground">(optional)</span>
+                        <Input name="task description" className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80 mb-3" placeholder="Describe the task..." />
+                    </Label>
+                )}
+                <div className="flex items-center space-x-2 mb-5 mt-5">
                     <Checkbox 
                         id="use-ai" 
                         checked={useAI} 
                         onCheckedChange={(checked) => setUseAI(checked === true)}
+                        className="border-primary focus:ring-primary/60 focus:border-primary transition"
                     />
                     <label 
                         htmlFor="use-ai" 
-                        className="text-sm font-medium leading-none flex items-center gap-1.5 cursor-pointer"
-                    >                        <Sparkles className="h-4 w-4" />
-                        Utiliser l&apos;IA pour analyser et diviser cette tâche
+                        className="text-sm font-medium leading-none flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors"
+                    >
+                        <Sparkles className="h-4 w-4 text-primary/80" />
+                        Use AI to analyze and split this task
                     </label>
                 </div>
-                {useAI && (                    <p className="text-sm text-muted-foreground mb-5">
-                        L&apos;IA utilisera la description du projet comme contexte et analysera le nom de la tâche 
-                        pour la diviser en sous-tâches si nécessaire.
+                {useAI && (
+                    <p className="text-xs text-muted-foreground mb-5 italic bg-primary/5 rounded px-3 py-2 border border-primary/10">
+                        AI will use the project description as context and analyze the task name to split it into subtasks if needed.
                     </p>
-                )}                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Traitement en cours...' : 'Create'}
+                )}
+                <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-primary text-white font-semibold py-2 rounded-lg shadow-md hover:bg-primary/90 transition disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                >
+                    {isLoading ? 'Processing...' : 'Create'}
                 </Button>
             </form>
         </CardContent>

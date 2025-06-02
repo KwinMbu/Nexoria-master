@@ -1,72 +1,138 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import Link from "next/link";
-import { buttonVariants } from "@/src/components/ui/button";
-import { prisma } from "@/src/lib/prisma";
+import { Button, buttonVariants } from "@/src/components/ui/button";
 import { DeleteTaskButton } from "../../delete-tasks-button";
-import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { useParams, useRouter } from "next/navigation";
 
-export default async function ProjectPage(props: { 
-  params: Promise<{
-    projectId: string;
-  }>;
-  searchParams?: Promise<Record<string, string | string[]>>;
-}) {
-    const params = await props.params;
-    const projectId = parseInt(params.projectId);
-    
-    if (isNaN(projectId)) {
-        notFound();
-    }
+interface Task {
+    id: number;
+    task: string;
+    description: string;
+    createdAt: string;
+}
 
-    const project = await prisma.project.findUnique({
-        where: {
-            id: projectId,
-        },
-        include: {
-            tasks: true,
-        },
-    });
+interface Project {
+    id: number;
+    project: string;
+    description: string;
+    tasks: Task[];
+}
 
-    if (!project) {
-        notFound();
+export default function ProjectPage() {
+    const [project, setProject] = useState<Project | null>(null);
+    const [loading, setLoading] = useState(true);
+    const params = useParams();
+    const router = useRouter();    const projectId = params.projectId as string;
+
+    const fetchProject = useCallback(async () => {
+        if (!projectId || isNaN(Number(projectId))) {
+            router.push('/404');
+            return;
+        }
+        
+        setLoading(true);
+        try {
+            const response = await fetch(`/api/project/${projectId}`, { cache: 'no-store' });
+            if (response.ok) {
+                const data = await response.json();
+                setProject(data);
+            }
+        } catch (error) {
+            console.error("Error fetching project:", error);
+        } finally {
+            setLoading(false);
+        }
+    }, [projectId, router]);
+
+    useEffect(() => {
+        fetchProject();
+    }, [fetchProject]);
+
+    if (loading || !project) {
+        return (
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between mb-4">
+                        <Link 
+                            href="/dashboard" 
+                            className={buttonVariants({size: "default", variant: "outline"}) + " hover:bg-black hover:text-white transition"}
+                        >
+                            <ArrowLeft className="h-4 w-4 mr-2" /> Back to dashboard
+                        </Link>
+                        <Button 
+                            onClick={fetchProject}
+                            variant="outline" 
+                            size="default"
+                            disabled
+                            className="hover:bg-black hover:text-white transition"
+                        >
+                            <RefreshCw className="h-4 w-4 animate-spin" />
+                        </Button>
+                    </div>
+                    <CardTitle>Loading...</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">Loading project details...</p>
+                </CardContent>
+            </Card>
+        );
     }
 
     return (
         <Card>
             <CardHeader>
-                {/* Bouton de retour au dashboard */}
-                <div className="flex items-center mb-4">
+                <div className="flex items-center justify-between mb-4">
                     <Link 
                         href="/dashboard" 
-                        className={buttonVariants({size: "sm", variant: "outline"})}
+                        className={buttonVariants({size: "default", variant: "outline"}) + " hover:bg-black hover:text-white transition"}
                     >
-                        <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
+                        <ArrowLeft className="h-4 w-4 mr-2" /> Back to dashboard
                     </Link>
                 </div>
-                <CardTitle>{project.project}</CardTitle>
-                <p className="text-muted-foreground">{project.description}</p>
+                <CardTitle className="text-2xl font-bold text-primary mb-1 drop-shadow-sm tracking-tight">{project.project}</CardTitle>
+                <p className="text-muted-foreground text-base mb-2 w-full bg-primary/5 rounded px-3 py-2 border border-primary/10 font-medium">{project.description}</p>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
-                <p className="flex items-center justify-between text-lg font-semibold">Tâches
-                <Link 
-                    href={`/dashboard/tasks/newtask?projectId=${project.id}`} 
-                    className={buttonVariants({size: "lg", variant: "outline"})}
-                >
-                     Create New Task
-                </Link>
-                </p>
+                <div className="flex items-center justify-between mb-2">
+                    <p className="text-lg font-semibold text-primary flex items-center gap-2">
+                        Tasks
+                    </p>
+                    <div className="flex gap-2 items-center">
+                        <Button 
+                            onClick={fetchProject}
+                            variant="outline"
+                            size="default"
+                            disabled={loading}
+                            className="h-10 hover:bg-black hover:text-white transition"
+                        >
+                            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                        </Button>
+                        <Link 
+                            href={`/dashboard/tasks/newtask?projectId=${project.id}`} 
+                            className={buttonVariants({size: "default", variant: "outline"}) + " h-10 flex items-center hover:bg-black hover:text-white transition"}
+                        >
+                            Create new task
+                        </Link>
+                    </div>
+                </div>
                 {project.tasks.length === 0 ? (
-                    <p className="text-muted-foreground">Aucune tâche pour ce projet.</p>
+                    <p className="text-muted-foreground">No tasks for this project.</p>
                 ) : (
-                    project.tasks.map((task) => (
-                        <Card className="p-4 flex items-start gap-4 relative" key={task.id}>
-                            <div className="absolute top-2 right-2">
-                                <DeleteTaskButton id={task.id} />
+                    project.tasks.map((task: Task) => (
+                        <Card className="p-4 flex items-start gap-4 relative border border-primary/10 bg-white/90 shadow-sm hover:shadow-lg transition group" key={task.id}>
+                            <div className="absolute top-2 right-2 opacity-80 group-hover:opacity-100 transition">
+                                <DeleteTaskButton id={Number(task.id)} />
                             </div>
                             <div className="flex flex-col gap-2 flex-1">
-                                <p className="text-lg font-semibold text-primary">{task.task}</p>
-                                <p className="max-w-[360px]">{task.description}</p>
+                                <p className="text-lg font-semibold text-primary group-hover:underline underline-offset-4 transition">{task.task}</p>
+                                <p className="max-w-[360px] text-gray-700 group-hover:text-primary/80 transition">{task.description}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    Created: {new Date(task.createdAt).toLocaleString('en-GB')}
+                                </p>
                             </div>
                         </Card>
                     ))
