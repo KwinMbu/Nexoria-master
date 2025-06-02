@@ -87,13 +87,13 @@ export default function ProjectPage() {
                 <div className="flex items-center justify-between mb-4">
                     <Link 
                         href="/dashboard" 
-                        className={buttonVariants({size: "default", variant: "outline"})}
+                        className={buttonVariants({size: "default", variant: "outline"}) + " hover:bg-black hover:text-white transition"}
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
                     </Link>
                 </div>
-                <CardTitle>{project.project}</CardTitle>
-                <p className="text-muted-foreground">{project.description}</p>
+                <CardTitle className="text-2xl font-bold text-primary mb-1 drop-shadow-sm tracking-tight">{project.project}</CardTitle>
+                <p className="text-muted-foreground text-base mb-2 w-full bg-primary/5 rounded px-3 py-2 border border-primary/10 font-medium">{project.description}</p>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
                 <div className="flex items-center justify-between mb-2">
@@ -103,16 +103,16 @@ export default function ProjectPage() {
                     <div className="flex gap-2 items-center">
                         <Button 
                             onClick={fetchProject}
-                            variant="outline" 
+                            variant="outline"
                             size="default"
                             disabled={loading}
-                            className="h-10"
+                            className="h-10 font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"
                         >
                             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                         </Button>
                         <Link 
                             href={`/dashboard/tasks/newtask?projectId=${project.id}`} 
-                            className={buttonVariants({size: "default", variant: "outline"}) + " h-10 flex items-center"}
+                            className={buttonVariants({size: "default", variant: "outline"}) + " h-10 flex items-center font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"}
                         >
                             Create New Task
                         </Link>
@@ -120,14 +120,15 @@ export default function ProjectPage() {
                 </div>
                 {project.tasks.length === 0 ? (
                     <p className="text-muted-foreground">Aucune tâche pour ce projet.</p>
-                ) : (                    project.tasks.map((task: Task) => (
-                        <Card className="p-4 flex items-start gap-4 relative" key={task.id}>
-                            <div className="absolute top-2 right-2">
+                ) : (
+                    project.tasks.map((task: Task) => (
+                        <Card className="p-4 flex items-start gap-4 relative border border-primary/10 bg-white/90 shadow-sm hover:shadow-lg transition group" key={task.id}>
+                            <div className="absolute top-2 right-2 opacity-80 group-hover:opacity-100 transition">
                                 <DeleteTaskButton id={Number(task.id)} />
                             </div>
                             <div className="flex flex-col gap-2 flex-1">
-                                <p className="text-lg font-semibold text-primary">{task.task}</p>
-                                <p className="max-w-[360px]">{task.description}</p>
+                                <p className="text-lg font-semibold text-primary group-hover:underline underline-offset-4 transition">{task.task}</p>
+                                <p className="max-w-[360px] text-gray-700 group-hover:text-primary/80 transition">{task.description}</p>
                                 <p className="text-xs text-muted-foreground">
                                     Créé le: {new Date(task.createdAt).toLocaleString('fr-FR')}
                                 </p>

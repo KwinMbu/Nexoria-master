@@ -51,12 +51,13 @@ export default function Dashboard() {
               variant="outline" 
               size="default"
               disabled
+              className="font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"
             >
               <RefreshCw className="h-4 w-4 animate-spin" />
             </Button>
             <Link 
               href="/dashboard/projects/newproject" 
-              className={buttonVariants({size: "default", variant: "outline"})}
+              className={buttonVariants({size: "default", variant: "outline"}) + " font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"}
             >
               Create new project
             </Link>
@@ -79,12 +80,13 @@ export default function Dashboard() {
           variant="outline" 
           size="default"
           disabled={loading}
+          className="font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
         </Button>
         <Link 
           href="/dashboard/projects/newproject" 
-          className={buttonVariants({size: "default", variant: "outline"})}
+          className={buttonVariants({size: "default", variant: "outline"}) + " font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"}
         >
           Create new project
         </Link>
@@ -106,12 +108,13 @@ export default function Dashboard() {
         variant="outline" 
         size="default"
         disabled={loading}
+        className="font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"
       >
         <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
       </Button>
       <Link 
         href="/dashboard/projects/newproject" 
-        className={buttonVariants({size: "default", variant: "outline"})}
+        className={buttonVariants({size: "default", variant: "outline"}) + " font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"}
       >
         Create new project
       </Link>
@@ -119,24 +122,29 @@ export default function Dashboard() {
     </CardHeader>
     <CardContent className="flex flex-col gap-4">
     {projects.map((project: Project) => (
-      <Card className="p-4 relative" key={project.id}>
+      <Card className="p-4 relative group transition hover:shadow-lg hover:border-primary/40 border border-primary/10 bg-white/90" key={project.id}>
       <div className="absolute top-4 right-4">
         <DeleteProjectButton id={project.id.toString()}/>
       </div>
-      
       <div className="pr-12">
         <div className="flex flex-wrap items-center gap-2 mb-2">
-        <p className="text-lg font-semibold text-primary">{project.project}</p>
-        <Button variant="secondary" className="text-xs px-2 py-1 h-auto bg-transparent">
-          {project._count.tasks} {project._count.tasks === 1 ? 'task' : 'tasks'}
-        </Button>
+          <Link 
+            href={`/dashboard/projects/${project.id}`}
+            className="text-lg font-semibold text-primary transition group-hover:underline underline-offset-4 cursor-pointer"
+          >
+            {project.project}
+          </Link>
+          <Button variant="secondary" className="text-xs px-2 py-1 h-auto bg-transparent">
+            {project._count.tasks} {project._count.tasks === 1 ? 'task' : 'tasks'}
+          </Button>
         </div>
-        
         <Link 
-        href={`/dashboard/projects/${project.id}`}
-        className="flex flex-col gap-2 cursor-pointer mt-2"
+          href={`/dashboard/projects/${project.id}`}
+          className="flex flex-col gap-2 cursor-pointer mt-2 group"
         > 
-        <p className="max-w-full text-sm sm:text-base">{project.description}</p>
+          <p className="max-w-full text-sm sm:text-base text-gray-700 group-hover:text-primary/80 transition font-medium">
+            {project.description}
+          </p>
         </Link>
       </div>
       </Card>
