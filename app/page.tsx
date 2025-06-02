@@ -8,13 +8,16 @@ export default function Home() {
       <CardHeader>
         <CardTitle>Bienvenue sur Nexoria</CardTitle>
       </CardHeader>
-      <CardContent>
-      <Link 
-        href="/dashboard" 
-        className={buttonVariants({size: "lg", variant: "outline"})}
-      >
-        Accéder à votre tableau de bord
-      </Link>
+      <CardContent className="flex flex-col items-start gap-6 mt-2">
+        <p className="text-base text-muted-foreground max-w-xl leading-relaxed">
+          Welcome to Nexoria, your all-in-one productivity platform. Effortlessly manage your projects and tasks  and boost your workflow with AI-powered features. Get started by accessing your dashboard below.
+        </p>
+        <Link 
+          href="/dashboard" 
+          className={buttonVariants({size: "lg", variant: "outline"}) + " font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition px-8 py-3"}
+        >
+          Go to your dashboard
+        </Link>
       </CardContent>
     </Card>
   )

@@ -57,12 +57,12 @@ export default function Page() {
                 }}
             >
                 <Label className="text-base font-semibold mb-1">
-                    Project
+                    Project name
                     <Input 
                         name="project name" 
                         required 
                         className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80" 
-                        placeholder="Nom du projet" 
+                        placeholder="Enter the project name" 
                     />
                 </Label>
                 <Label className="text-base font-semibold mb-1">
@@ -70,7 +70,7 @@ export default function Page() {
                     <Input 
                         name="project description" 
                         className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80 mb-5" 
-                        placeholder="Décrivez le projet..." 
+                        placeholder="Describe your project..." 
                         required 
                     />
                 </Label>

@@ -59,15 +59,16 @@ export default function ProjectPage() {
                     <div className="flex items-center justify-between mb-4">
                         <Link 
                             href="/dashboard" 
-                            className={buttonVariants({size: "default", variant: "outline"})}
+                            className={buttonVariants({size: "default", variant: "outline"}) + " hover:bg-black hover:text-white transition"}
                         >
-                            <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
+                            <ArrowLeft className="h-4 w-4 mr-2" /> Back to dashboard
                         </Link>
                         <Button 
                             onClick={fetchProject}
                             variant="outline" 
                             size="default"
                             disabled
+                            className="hover:bg-black hover:text-white transition"
                         >
                             <RefreshCw className="h-4 w-4 animate-spin" />
                         </Button>
@@ -89,7 +90,7 @@ export default function ProjectPage() {
                         href="/dashboard" 
                         className={buttonVariants({size: "default", variant: "outline"}) + " hover:bg-black hover:text-white transition"}
                     >
-                        <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
+                        <ArrowLeft className="h-4 w-4 mr-2" /> Back to dashboard
                     </Link>
                 </div>
                 <CardTitle className="text-2xl font-bold text-primary mb-1 drop-shadow-sm tracking-tight">{project.project}</CardTitle>
@@ -98,7 +99,7 @@ export default function ProjectPage() {
             <CardContent className="flex flex-col gap-4">
                 <div className="flex items-center justify-between mb-2">
                     <p className="text-lg font-semibold text-primary flex items-center gap-2">
-                        Tâches
+                        Tasks
                     </p>
                     <div className="flex gap-2 items-center">
                         <Button 
@@ -106,20 +107,20 @@ export default function ProjectPage() {
                             variant="outline"
                             size="default"
                             disabled={loading}
-                            className="h-10 font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"
+                            className="h-10 hover:bg-black hover:text-white transition"
                         >
                             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                         </Button>
                         <Link 
                             href={`/dashboard/tasks/newtask?projectId=${project.id}`} 
-                            className={buttonVariants({size: "default", variant: "outline"}) + " h-10 flex items-center font-semibold rounded-lg shadow-sm border-primary/60 hover:bg-black hover:text-white transition"}
+                            className={buttonVariants({size: "default", variant: "outline"}) + " h-10 flex items-center hover:bg-black hover:text-white transition"}
                         >
-                            Create New Task
+                            Create new task
                         </Link>
                     </div>
                 </div>
                 {project.tasks.length === 0 ? (
-                    <p className="text-muted-foreground">Aucune tâche pour ce projet.</p>
+                    <p className="text-muted-foreground">No tasks for this project.</p>
                 ) : (
                     project.tasks.map((task: Task) => (
                         <Card className="p-4 flex items-start gap-4 relative border border-primary/10 bg-white/90 shadow-sm hover:shadow-lg transition group" key={task.id}>
@@ -130,7 +131,7 @@ export default function ProjectPage() {
                                 <p className="text-lg font-semibold text-primary group-hover:underline underline-offset-4 transition">{task.task}</p>
                                 <p className="max-w-[360px] text-gray-700 group-hover:text-primary/80 transition">{task.description}</p>
                                 <p className="text-xs text-muted-foreground">
-                                    Créé le: {new Date(task.createdAt).toLocaleString('fr-FR')}
+                                    Created: {new Date(task.createdAt).toLocaleString('en-GB')}
                                 </p>
                             </div>
                         </Card>

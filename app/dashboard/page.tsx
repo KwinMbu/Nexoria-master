@@ -44,7 +44,7 @@ export default function Dashboard() {
     return (
       <Card className="w-full">
         <CardHeader className="flex items-center justify-between">
-          <CardTitle className="text-xl">My project</CardTitle>
+          <CardTitle className="text-xl">My projects</CardTitle>
           <div className="flex gap-2">
             <Button 
               onClick={fetchProjects}
@@ -73,7 +73,7 @@ export default function Dashboard() {
   return (
     <Card className="w-full">
     <CardHeader className="flex items-center justify-between">
-      <CardTitle className="text-xl">My project</CardTitle>
+      <CardTitle className="text-xl">My projects</CardTitle>
       <div className="flex gap-2">
         <Button 
           onClick={fetchProjects}
@@ -101,7 +101,7 @@ export default function Dashboard() {
     return (
   <Card className="w-full">
     <CardHeader className="flex items-center justify-between">
-    <CardTitle className="text-xl">My project</CardTitle>
+    <CardTitle className="text-xl">My projects</CardTitle>
     <div className="flex gap-2">
       <Button 
         onClick={fetchProjects}

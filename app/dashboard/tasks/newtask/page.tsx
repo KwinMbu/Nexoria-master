@@ -84,41 +84,30 @@ export default function Page() {
     return (
     <Card>
         <CardHeader>
-            <CardTitle className="text-2xl font-bold text-primary mb-1">New Task</CardTitle>
-            {projectId && <p className="text-xs text-muted-foreground italic">Pour le projet ID: {projectId}</p>}
+            <CardTitle>New Task</CardTitle>
+            {projectId && <p className="text-sm text-muted-foreground">For project ID: {projectId}</p>}
         </CardHeader>
         <CardContent>
             <form 
-                className="flex flex-col gap-5"
                 onSubmit={async (e) => {
                     e.preventDefault();
                     setIsLoading(true);
                     const formData = new FormData(e.currentTarget);
                     await createTask(formData);
                 }}
+                className="flex flex-col gap-5"
             >
-                <Label className="text-base font-semibold mb-1"> 
+                <Label className="text-base font-semibold mb-1">
                     Task
-                    <Input 
-                        name="task name" 
-                        required 
-                        className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80" 
-                        placeholder="Nom de la tâche" 
-                    />
+                    <Input name="task name" required className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80" placeholder="Task name" />
                 </Label>                
-                
                 {!useAI && (
                     <Label className="text-base font-semibold mb-1">
-                        Description <span className="text-xs text-muted-foreground">(optionnel)</span>
-                        <Input 
-                            name="task description" 
-                            className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80 mb-3" 
-                            placeholder="Décrivez la tâche..." 
-                        />
+                        Description <span className="text-xs text-muted-foreground">(optional)</span>
+                        <Input name="task description" className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80 mb-3" placeholder="Describe the task..." />
                     </Label>
                 )}
-                
-                <div className="flex items-center space-x-3 mb-5 mt-5">
+                <div className="flex items-center space-x-2 mb-5 mt-5">
                     <Checkbox 
                         id="use-ai" 
                         checked={useAI} 
@@ -128,20 +117,22 @@ export default function Page() {
                     <label 
                         htmlFor="use-ai" 
                         className="text-sm font-medium leading-none flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors"
-                    >                        <Sparkles className="h-4 w-4 text-primary/80" />
-                        Utiliser l&apos;IA pour analyser et diviser cette tâche
+                    >
+                        <Sparkles className="h-4 w-4 text-primary/80" />
+                        Use AI to analyze and split this task
                     </label>
                 </div>
-                {useAI && (                    <p className="text-xs text-muted-foreground mb-5 italic bg-primary/5 rounded px-3 py-2 border border-primary/10">
-                        L&apos;IA utilisera la description du projet comme contexte et analysera le nom de la tâche 
-                        pour la diviser en sous-tâches si nécessaire.
+                {useAI && (
+                    <p className="text-xs text-muted-foreground mb-5 italic bg-primary/5 rounded px-3 py-2 border border-primary/10">
+                        AI will use the project description as context and analyze the task name to split it into subtasks if needed.
                     </p>
-                )}                  <Button 
+                )}
+                <Button 
                     type="submit" 
                     disabled={isLoading}
                     className="w-full bg-primary text-white font-semibold py-2 rounded-lg shadow-md hover:bg-primary/90 transition disabled:opacity-60 disabled:cursor-not-allowed mt-2"
                 >
-                    {isLoading ? 'Traitement en cours...' : 'Créer'}
+                    {isLoading ? 'Processing...' : 'Create'}
                 </Button>
             </form>
         </CardContent>
