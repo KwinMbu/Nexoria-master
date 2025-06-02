@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bienvenue sur Nexoria</CardTitle>
+        <CardTitle>Welcome to Nexoria</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-start gap-6 mt-2">
         <p className="text-base text-muted-foreground max-w-xl leading-relaxed">
