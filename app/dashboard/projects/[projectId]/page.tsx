@@ -59,14 +59,14 @@ export default function ProjectPage() {
                     <div className="flex items-center justify-between mb-4">
                         <Link 
                             href="/dashboard" 
-                            className={buttonVariants({size: "sm", variant: "outline"})}
+                            className={buttonVariants({size: "default", variant: "outline"})}
                         >
                             <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
                         </Link>
                         <Button 
                             onClick={fetchProject}
                             variant="outline" 
-                            size="sm"
+                            size="default"
                             disabled
                         >
                             <RefreshCw className="h-4 w-4 animate-spin" />
@@ -87,31 +87,38 @@ export default function ProjectPage() {
                 <div className="flex items-center justify-between mb-4">
                     <Link 
                         href="/dashboard" 
-                        className={buttonVariants({size: "sm", variant: "outline"})}
+                        className={buttonVariants({size: "default", variant: "outline"})}
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
                     </Link>
-                    <Button 
-                        onClick={fetchProject}
-                        variant="outline" 
-                        size="sm"
-                        disabled={loading}
-                    >
-                        <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                    </Button>
                 </div>
                 <CardTitle>{project.project}</CardTitle>
                 <p className="text-muted-foreground">{project.description}</p>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
-                <p className="flex items-center justify-between text-lg font-semibold">Tâches
-                <Link 
-                    href={`/dashboard/tasks/newtask?projectId=${project.id}`} 
-                    className={buttonVariants({size: "lg", variant: "outline"})}
-                >
-                     Create New Task
-                </Link>
-                </p>                {project.tasks.length === 0 ? (
+                <div className="flex items-center justify-between mb-2">
+                    <p className="text-lg font-semibold text-primary flex items-center gap-2">
+                        Tâches
+                    </p>
+                    <div className="flex gap-2 items-center">
+                        <Button 
+                            onClick={fetchProject}
+                            variant="outline" 
+                            size="default"
+                            disabled={loading}
+                            className="h-10"
+                        >
+                            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                        </Button>
+                        <Link 
+                            href={`/dashboard/tasks/newtask?projectId=${project.id}`} 
+                            className={buttonVariants({size: "default", variant: "outline"}) + " h-10 flex items-center"}
+                        >
+                            Create New Task
+                        </Link>
+                    </div>
+                </div>
+                {project.tasks.length === 0 ? (
                     <p className="text-muted-foreground">Aucune tâche pour ce projet.</p>
                 ) : (                    project.tasks.map((task: Task) => (
                         <Card className="p-4 flex items-start gap-4 relative" key={task.id}>

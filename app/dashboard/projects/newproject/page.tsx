@@ -47,23 +47,39 @@ export default function Page() {
     return (
     <Card>
         <CardHeader>
-            <CardTitle>New Project</CardTitle>
+            <CardTitle className="text-2xl font-bold text-primary mb-1">New Project</CardTitle>
         </CardHeader>
         <CardContent>
             <form 
-                action= {async (formData) => { 
+                className="flex flex-col gap-5"
+                action={async (formData) => { 
                     await createProject(formData);
                 }}
             >
-                <Label>
+                <Label className="text-base font-semibold mb-1">
                     Project
-                    <Input name="project name" required/>
+                    <Input 
+                        name="project name" 
+                        required 
+                        className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80" 
+                        placeholder="Nom du projet" 
+                    />
                 </Label>
-                <Label>
+                <Label className="text-base font-semibold mb-1">
                     Description
-                    <Input name="project description" className="mb-5" required />
+                    <Input 
+                        name="project description" 
+                        className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80 mb-5" 
+                        placeholder="Décrivez le projet..." 
+                        required 
+                    />
                 </Label>
-                <Button type="submit">Create</Button>
+                <Button 
+                    type="submit" 
+                    className="w-full bg-primary text-white font-semibold py-2 rounded-lg shadow-md hover:bg-primary/90 transition disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                >
+                    Create
+                </Button>
             </form>
         </CardContent>
     </Card>

@@ -84,11 +84,12 @@ export default function Page() {
     return (
     <Card>
         <CardHeader>
-            <CardTitle>New Task</CardTitle>
-            {projectId && <p className="text-sm text-muted-foreground">Pour le projet ID: {projectId}</p>}
+            <CardTitle className="text-2xl font-bold text-primary mb-1">New Task</CardTitle>
+            {projectId && <p className="text-xs text-muted-foreground italic">Pour le projet ID: {projectId}</p>}
         </CardHeader>
         <CardContent>
             <form 
+                className="flex flex-col gap-5"
                 onSubmit={async (e) => {
                     e.preventDefault();
                     setIsLoading(true);
@@ -96,38 +97,51 @@ export default function Page() {
                     await createTask(formData);
                 }}
             >
-                <Label>
+                <Label className="text-base font-semibold mb-1"> 
                     Task
-                    <Input name="task name" required />
+                    <Input 
+                        name="task name" 
+                        required 
+                        className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80" 
+                        placeholder="Nom de la tâche" 
+                    />
                 </Label>                
                 
                 {!useAI && (
-                    <Label>
-                        Description (optionnel)
-                        <Input name="task description" className="mb-3" />
+                    <Label className="text-base font-semibold mb-1">
+                        Description <span className="text-xs text-muted-foreground">(optionnel)</span>
+                        <Input 
+                            name="task description" 
+                            className="mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition placeholder:text-gray-400 bg-white/80 mb-3" 
+                            placeholder="Décrivez la tâche..." 
+                        />
                     </Label>
                 )}
                 
-                
-                <div className="flex items-center space-x-2 mb-5 mt-5">
+                <div className="flex items-center space-x-3 mb-5 mt-5">
                     <Checkbox 
                         id="use-ai" 
                         checked={useAI} 
                         onCheckedChange={(checked) => setUseAI(checked === true)}
+                        className="border-primary focus:ring-primary/60 focus:border-primary transition"
                     />
                     <label 
                         htmlFor="use-ai" 
-                        className="text-sm font-medium leading-none flex items-center gap-1.5 cursor-pointer"
-                    >                        <Sparkles className="h-4 w-4" />
+                        className="text-sm font-medium leading-none flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors"
+                    >                        <Sparkles className="h-4 w-4 text-primary/80" />
                         Utiliser l&apos;IA pour analyser et diviser cette tâche
                     </label>
                 </div>
-                {useAI && (                    <p className="text-sm text-muted-foreground mb-5">
+                {useAI && (                    <p className="text-xs text-muted-foreground mb-5 italic bg-primary/5 rounded px-3 py-2 border border-primary/10">
                         L&apos;IA utilisera la description du projet comme contexte et analysera le nom de la tâche 
                         pour la diviser en sous-tâches si nécessaire.
                     </p>
-                )}                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Traitement en cours...' : 'Create'}
+                )}                  <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-primary text-white font-semibold py-2 rounded-lg shadow-md hover:bg-primary/90 transition disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                >
+                    {isLoading ? 'Traitement en cours...' : 'Créer'}
                 </Button>
             </form>
         </CardContent>
