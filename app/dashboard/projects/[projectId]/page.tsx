@@ -1,46 +1,104 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import Link from "next/link";
-import { buttonVariants } from "@/src/components/ui/button";
-import  prisma  from "@/src/lib/prisma";
+import { Button, buttonVariants } from "@/src/components/ui/button";
 import { DeleteTaskButton } from "../../delete-tasks-button";
-import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react"; // Importer l'icône de flèche
+import { ArrowLeft, RefreshCw } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { useParams, useRouter } from "next/navigation";
 
-export default async function ProjectPage({
-    params,
-}: {
-    params: Promise<{ projectId: string }>;
-}) {
-    const resolvedParams = await params;
-    const projectId = parseInt(resolvedParams.projectId);
-    
-    if (isNaN(projectId)) {
-        notFound();
-    }
+interface Task {
+    id: number;
+    task: string;
+    description: string;
+    createdAt: string;
+}
 
-    const project = await prisma.project.findUnique({
-        where: {
-            id: projectId,
-        },
-        include: {
-            tasks: true,
-        },
-    });
+interface Project {
+    id: number;
+    project: string;
+    description: string;
+    tasks: Task[];
+}
 
-    if (!project) {
-        notFound();
+export default function ProjectPage() {
+    const [project, setProject] = useState<Project | null>(null);
+    const [loading, setLoading] = useState(true);
+    const params = useParams();
+    const router = useRouter();    const projectId = params.projectId as string;
+
+    const fetchProject = useCallback(async () => {
+        if (!projectId || isNaN(Number(projectId))) {
+            router.push('/404');
+            return;
+        }
+        
+        setLoading(true);
+        try {
+            const response = await fetch(`/api/project/${projectId}`, { cache: 'no-store' });
+            if (response.ok) {
+                const data = await response.json();
+                setProject(data);
+            }
+        } catch (error) {
+            console.error("Error fetching project:", error);
+        } finally {
+            setLoading(false);
+        }
+    }, [projectId, router]);
+
+    useEffect(() => {
+        fetchProject();
+    }, [fetchProject]);
+
+    if (loading || !project) {
+        return (
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between mb-4">
+                        <Link 
+                            href="/dashboard" 
+                            className={buttonVariants({size: "sm", variant: "outline"})}
+                        >
+                            <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
+                        </Link>
+                        <Button 
+                            onClick={fetchProject}
+                            variant="outline" 
+                            size="sm"
+                            disabled
+                        >
+                            <RefreshCw className="h-4 w-4 animate-spin" />
+                        </Button>
+                    </div>
+                    <CardTitle>Loading...</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">Loading project details...</p>
+                </CardContent>
+            </Card>
+        );
     }
 
     return (
         <Card>
             <CardHeader>
-                <div className="flex items-center mb-4">
+                <div className="flex items-center justify-between mb-4">
                     <Link 
                         href="/dashboard" 
                         className={buttonVariants({size: "sm", variant: "outline"})}
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
                     </Link>
+                    <Button 
+                        onClick={fetchProject}
+                        variant="outline" 
+                        size="sm"
+                        disabled={loading}
+                    >
+                        <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                    </Button>
                 </div>
                 <CardTitle>{project.project}</CardTitle>
                 <p className="text-muted-foreground">{project.description}</p>
@@ -53,18 +111,19 @@ export default async function ProjectPage({
                 >
                      Create New Task
                 </Link>
-                </p>
-                {project.tasks.length === 0 ? (
+                </p>                {project.tasks.length === 0 ? (
                     <p className="text-muted-foreground">Aucune tâche pour ce projet.</p>
-                ) : (
-                    project.tasks.map((task) => (
+                ) : (                    project.tasks.map((task: Task) => (
                         <Card className="p-4 flex items-start gap-4 relative" key={task.id}>
                             <div className="absolute top-2 right-2">
-                                <DeleteTaskButton id={task.id} />
+                                <DeleteTaskButton id={Number(task.id)} />
                             </div>
                             <div className="flex flex-col gap-2 flex-1">
                                 <p className="text-lg font-semibold text-primary">{task.task}</p>
                                 <p className="max-w-[360px]">{task.description}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    Créé le: {new Date(task.createdAt).toLocaleString('fr-FR')}
+                                </p>
                             </div>
                         </Card>
                     ))
