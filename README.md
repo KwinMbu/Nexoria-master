@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nexoria
 
-## Getting Started
+## Pitch
+Nexoria est un outil qui permet de créer des tâches automatiquement en prenant la description du projet, spécialement conçu pour les personnes qui ont du mal à s'organiser et à séparer les tâches.
 
-First, run the development server:
+## Description
+Nexoria permet aux individus de structurer leurs projets en divisant le travail en tâches claires, avec des priorités et des dates limites, facilitant ainsi l'organisation et la gestion du travail quotidien.
+**Pourquoi ce projet ?** Aujourd'hui, beaucoup de personnes ont du mal à organiser leur travail et à séparer les tâches de manière efficace. Nexoria facilite cette organisation grâce à un outil simple et puissant.
+**Utilisateurs visés :** personnes ayant des difficultés à s'organiser, freelances, étudiants, et toute personne cherchant à mieux structurer son travail.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [x] Création et suppression de projets
+- [x] Création et suppression de tâches liées à un projet
+- [x] Gestion des priorités et échéances des tâches
+- [x] Création de tâches automatique avec l'IA
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*Pourquoi ces features ?*
+Chaque fonctionnalité vise à simplifier le suivi et la gestion du travail quotidien, tout en aidant les utilisateurs à mieux organiser et séparer leurs tâches.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stack Technique
 
-## Learn More
+- **Front-end :** Next.js, Tailwind CSS
+- **Back-end :** Node.js
+- **Base de données :** SQLite
+- **Déploiement :** Vercel
+- **Outils supplémentaires :** Git, Postman
 
-To learn more about Next.js, take a look at the following resources:
+## Installation & Lancement
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clonez le dépôt :
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   git clone https://github.com/KwinMbu/Nexoria-master
+   ```
 
-## Deploy on Vercel
+2. Accédez au dossier du projet :
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ```bash
+    cd Nexoria-master
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Installez les dépendances :
+
+    ```bash 
+    npm install 
+    ```
+
+4. Créez un fichier .env à la racine du projet et ajoutez les variables d'environnement suivantes : 
+
+    ```bash
+    DATABASE_URL="file:./dev.db"
+    MISTRAL_API_KEY="Votre-clé-API-Mistral"
+    ```
+
+5. Initialisez la base de données avec Prisma : 
+
+    ```bash
+    npx prisma migrate dev --name db
+    ```
+
+6. Lancez le projet en mode développement : 
+
+    ```bash
+    npm run dev
+    ```

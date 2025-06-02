@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import Link from "next/link";
 import { buttonVariants } from "@/src/components/ui/button";
-import { prisma } from "@/src/lib/prisma";
+import  prisma  from "@/src/lib/prisma";
 import { DeleteTaskButton } from "../../delete-tasks-button";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react"; // Importer l'icône de flèche
